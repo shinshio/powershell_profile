@@ -1,13 +1,52 @@
+# ----------
 # variables
+# ----------
+
 $work = "C:/work/"
+$tools = "C:/tools/"
 
+# ----------
+# functions
+# ----------
 
+# reflesh profile
+function exec_source(){
+    . $profile
+}
+
+# open yoyakuhyo.exe
+function exec_yoyakuhyo(){
+    c:/tools/yoyakuhyo/yoyakuhyo.exe
+}
+
+# open $Program as superuser
+function Global:sudo($Program="powershell", $Argument){
+    if($null -eq $Argument){
+        Start-Process $Program -Verb runas
+    }
+    else{
+        Start-Process $Program -Verb runas $Argument
+    }
+}
+
+# ----------
 # alias
+# ----------
+
+Set-Alias -name source -value exec_source
 Set-Alias -name la -value Get-ChildItem -force | Sort-Object {$_.Name}
 Set-Alias -name which -value where.exe
+Set-Alias -name yoyakuhyo -value exec_yoyakuhyo
 
+# ----------
+# proxy server settings
+# ----------
 
-# prompt
+Set-Item -path Env:http_proxy -value http://in-proxy-o:8080
+
+# ----------
+#  prompt
+# ----------
 function Prompt {
     # inplace HOME to ~
     $curPath = $ExecutionContext.SessionState.Path.CurrentLocation.Path
